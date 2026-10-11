@@ -89,7 +89,7 @@ def run_onnx(path: Path, batch):
 
 def _torch_missing(err: Exception) -> UploaderError:
     return UploaderError(
-        f"{err}. Torch sources need the optional extra: `uv tool install 'sparrow-model-uploader[ultralytics] @ git+https://github.com/microsoft/Sparrow-Model-Zoo-Uploader'` "
+        f"{err}. Torch sources need the optional extra: `uv tool install 'sparrow-model-uploader[ultralytics] @ git+https://github.com/microsoft/SPARROW-Model-Zoo-Uploader'` "
         "or run the source model yourself and pass --reference-outputs (see `parity raw --emit-inputs`)."
     )
 

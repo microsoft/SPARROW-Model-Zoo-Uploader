@@ -29,7 +29,7 @@ def _api(token: str | None):
         raise UploaderError(
             "submit needs huggingface_hub: reinstall with the [submit] extra, e.g. "
             "uv tool install 'sparrow-model-uploader[submit] @ "
-            "git+https://github.com/microsoft/Sparrow-Model-Zoo-Uploader'"
+            "git+https://github.com/microsoft/SPARROW-Model-Zoo-Uploader'"
         ) from exc
     return HfApi(token=token)
 

@@ -13,8 +13,8 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/microsoft/Sparrow-Model-Zoo-Uploader"
-Issues = "https://github.com/microsoft/Sparrow-Model-Zoo-Uploader/issues"
+Homepage = "https://github.com/microsoft/SPARROW-Model-Zoo-Uploader"
+Issues = "https://github.com/microsoft/SPARROW-Model-Zoo-Uploader/issues"
 
 [project.optional-dependencies]
 # Conversion-time only. Ultralytics is AGPL-3.0; it never ships inside a bundle.

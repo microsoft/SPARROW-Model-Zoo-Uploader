@@ -35,8 +35,8 @@ preprocessing details, write labels and the model card.
 
 ## Running the CLI
 
-Install once: `uv tool install git+https://github.com/microsoft/Sparrow-Model-Zoo-Uploader` (then `sparrow-uploader ...`), or run
-without installing: `uvx --from git+https://github.com/microsoft/Sparrow-Model-Zoo-Uploader sparrow-uploader ...`. The package is not on PyPI. Every command
+Install once: `uv tool install git+https://github.com/microsoft/SPARROW-Model-Zoo-Uploader` (then `sparrow-uploader ...`), or run
+without installing: `uvx --from git+https://github.com/microsoft/SPARROW-Model-Zoo-Uploader sparrow-uploader ...`. The package is not on PyPI. Every command
 prints JSON on stdout. Exit codes: `0` pass/warn, `1` gate failed, `2` usage or input error.
 
 Workspace: `./.sparrow-upload/<model_id>/` by default; override with `--workspace DIR` or

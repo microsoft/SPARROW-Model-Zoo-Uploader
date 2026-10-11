@@ -2,7 +2,7 @@
 
 ## How to file issues and get help
 
-This project uses [GitHub Issues](https://github.com/microsoft/Sparrow-Model-Zoo-Uploader/issues)
+This project uses [GitHub Issues](https://github.com/microsoft/SPARROW-Model-Zoo-Uploader/issues)
 to track bugs and feature requests. Please search the existing issues before filing a new one to
 avoid duplicates.
 

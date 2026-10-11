@@ -61,14 +61,14 @@ fixed at its cause; the skill forbids loosening a threshold to get a pass.
 The command-line tool (not on PyPI yet; install from this repository):
 
 ```bash
-uv tool install git+https://github.com/microsoft/Sparrow-Model-Zoo-Uploader
+uv tool install git+https://github.com/microsoft/SPARROW-Model-Zoo-Uploader
 sparrow-uploader doctor
 ```
 
 Models whose source is PyTorch or Ultralytics need the optional extra for the raw-parity check:
 
 ```bash
-uv tool install 'sparrow-model-uploader[ultralytics] @ git+https://github.com/microsoft/Sparrow-Model-Zoo-Uploader'
+uv tool install 'sparrow-model-uploader[ultralytics] @ git+https://github.com/microsoft/SPARROW-Model-Zoo-Uploader'
 ```
 
 The extra installs Ultralytics (AGPL-3.0) into your environment for conversion only. It does not
@@ -79,14 +79,14 @@ The agent skill, pick one:
 
 ```bash
 # Claude Code
-claude plugin marketplace add microsoft/Sparrow-Model-Zoo-Uploader
+claude plugin marketplace add microsoft/SPARROW-Model-Zoo-Uploader
 claude plugin install sparrow-model-uploader
 
 # GitHub Copilot CLI
-copilot plugin install microsoft/Sparrow-Model-Zoo-Uploader
+copilot plugin install microsoft/SPARROW-Model-Zoo-Uploader
 
 # Gemini CLI
-gemini extensions install https://github.com/microsoft/Sparrow-Model-Zoo-Uploader
+gemini extensions install https://github.com/microsoft/SPARROW-Model-Zoo-Uploader
 
 # Any agent that reads a skills folder: copy the skill bundled with the CLI
 sparrow-uploader install-skill --target claude     # ~/.claude/skills
@@ -158,7 +158,7 @@ It needs the `[submit]` extra and a Hugging Face **Write** token
 ([settings/tokens](https://huggingface.co/settings/tokens)) in `HF_TOKEN` or from `hf auth login`.
 
 ```bash
-uv tool install 'sparrow-model-uploader[submit] @ git+https://github.com/microsoft/Sparrow-Model-Zoo-Uploader'
+uv tool install 'sparrow-model-uploader[submit] @ git+https://github.com/microsoft/SPARROW-Model-Zoo-Uploader'
 sparrow-uploader submit --model-id my-detector --dry-run          # what would be uploaded
 sparrow-uploader submit --model-id my-detector --confirm-public   # open the pull request
 sparrow-uploader status --model-id my-detector                    # review state and comments
