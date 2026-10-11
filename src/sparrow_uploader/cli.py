@@ -231,7 +231,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     sp = stage("init", cmd_init, "record provenance and licence; create the workspace")
     sp.add_argument("--task", required=True, choices=sorted(caps.TASK_TO_MODEL_TYPE))
-    sp.add_argument("--license", required=True, help="SPDX id of the weights' licence")
+    sp.add_argument(
+        "--license",
+        default="",
+        help="SPDX id of the weights' licence (default AGPL-3.0 when --framework names ultralytics)",
+    )
     sp.add_argument(
         "--source", required=True, help="URL of the upstream weights or repository"
     )

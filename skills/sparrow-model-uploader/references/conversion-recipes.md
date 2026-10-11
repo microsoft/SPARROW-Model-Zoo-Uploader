@@ -59,7 +59,9 @@ the engine consumes (logits, boxes, or embedding), and export the wrapper.
 
 ## Ultralytics YOLO (v5u, v8, v9, v10, 11)
 
-Ultralytics is AGPL-3.0. It is used only at conversion time and is never shipped in the bundle.
+Ultralytics is AGPL-3.0. It is used only at conversion time and is never shipped in the bundle, but
+weights trained with it are AGPL-3.0 too unless the rights holder has an Ultralytics Enterprise
+licence: use `--license AGPL-3.0` (see SKILL.md S1).
 Install the extra: `uv tool install 'sparrow-model-uploader[ultralytics] @ git+https://github.com/microsoft/Sparrow-Model-Zoo-Uploader'`.
 
 ```python

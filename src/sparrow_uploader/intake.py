@@ -13,6 +13,7 @@ from .compliance import (
     file_entry,
     is_http_url,
     license_restrictions,
+    ultralytics_license_warning,
     uses_ultralytics,
 )
 from .workspace import UploaderError, Workspace, now_iso, sha256_file
@@ -77,6 +78,9 @@ def init(
         raise UploaderError(
             f"task must be one of {sorted(caps.TASK_TO_MODEL_TYPE)}; got {task!r}"
         )
+    defaulted = False
+    if not license_id.strip() and uses_ultralytics(framework):
+        license_id, defaulted = ULTRALYTICS_LICENSE, True
     ok, why = check_license(license_id)
     errors = [] if ok else [why]
     framework_licenses = list(framework_licenses or [])
@@ -101,6 +105,14 @@ def init(
         )
     if ok and commercial_use_status(license_id) != "allowed":
         warnings.append(why)
+    if defaulted:
+        warnings.append(
+            "no --license: weights trained with Ultralytics default to AGPL-3.0 (Ultralytics' "
+            "licence covers derived models); pass --license only if the rights holder has an "
+            "Ultralytics Enterprise licence"
+        )
+    elif ok and (ul := ultralytics_license_warning(license_id, framework)):
+        warnings.append(ul)
     if uses_ultralytics(framework) and ULTRALYTICS_LICENSE not in framework_licenses:
         framework_licenses.append(ULTRALYTICS_LICENSE)
         warnings.append(

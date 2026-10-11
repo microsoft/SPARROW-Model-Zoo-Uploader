@@ -100,6 +100,18 @@ def uses_ultralytics(framework: str) -> bool:
     return "ultralytics" in (framework or "").lower()
 
 
+def ultralytics_license_warning(license_id: str, framework: str) -> str | None:
+    """Ultralytics' AGPL-3.0 covers models trained with it; warn when another licence is stated."""
+    if not uses_ultralytics(framework) or license_id.strip().startswith("AGPL-3.0"):
+        return None
+    return (
+        f"weights licence {license_id.strip()!r} on an Ultralytics model: Ultralytics requires models "
+        "trained with it to be AGPL-3.0 unless the rights holder has an Ultralytics Enterprise "
+        "licence. A different licence on the hosting page (e.g. CC-BY-4.0 on Zenodo) does not "
+        "replace it. Use --license AGPL-3.0 unless the rights holder confirms an Enterprise licence"
+    )
+
+
 def approval_fields(prov: dict[str, Any]) -> dict[str, str]:
     """Rights fields a zoo admin sets on approval. Conditional terms mean hosted_restricted."""
     restrictions = rights_fields(prov)["restrictions"]
@@ -185,6 +197,9 @@ def provenance_issues(prov: dict[str, Any]) -> tuple[list[str], list[str]]:
         warnings.append(
             "no --display-name recorded; the catalog shows the model id instead of a readable name"
         )
+    ul = ultralytics_license_warning(prov.get("license", ""), prov.get("framework", ""))
+    if ul:
+        warnings.append(ul)
     return errors, warnings
 
 

@@ -78,9 +78,15 @@ Any weights licence the user states is accepted: it describes the output bundle 
 zoo admin decides how to host it. Record the licence exactly as the user gives it. Non-commercial
 terms (`-NC`, "research only") set `commercial_use = false`; a licence the uploader does not know
 is recorded with `commercial_use_status = unverified`. If the user does not know the licence,
-ask them to find it; do not guess. If you convert with Ultralytics, pass a `--framework` that
-names it: init then records `AGPL-3.0` in the bundle's `framework_licenses`. That concerns the
-converted model only, not the uploader's own MIT licence.
+ask them to find it; do not guess. Exception: weights trained with Ultralytics (YOLOv5u, v8,
+v10, 11, e.g. MegaDetector v6) are **AGPL-3.0 by default**, because Ultralytics' licence covers
+models trained with it unless the rights holder has an Ultralytics Enterprise licence. Use
+`--license AGPL-3.0` (or omit `--license`; init defaults to it when `--framework` names
+Ultralytics) even when the hosting page shows another licence such as CC-BY-4.0 on Zenodo. Use a
+different licence only when the user confirms an Enterprise licence; init and lint warn otherwise.
+Name Ultralytics in `--framework`: init then also records `AGPL-3.0` in the bundle's
+`framework_licenses`. All of this concerns the converted model only, not the uploader's own MIT
+licence.
 
 ### S2 — Parity data (ask the user)
 
