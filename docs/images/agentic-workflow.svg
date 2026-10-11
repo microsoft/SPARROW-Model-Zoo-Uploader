@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400" width="1000" height="400" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <rect width="1000" height="400" rx="16" fill="#ffffff"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+    </marker>
+  </defs>
+
+  <!-- Card 1: You -->
+  <rect x="30" y="30" width="270" height="290" rx="14" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+  <circle cx="165" cy="78" r="16" fill="#10b981"/>
+  <path d="M137,122 a28,24 0 0 1 56,0 z" fill="#10b981"/>
+  <text x="165" y="156" text-anchor="middle" font-size="22" font-weight="700" fill="#065f46">1. You</text>
+  <text x="165" y="190" text-anchor="middle" font-size="15" fill="#1f2937">Paste one prompt into</text>
+  <text x="165" y="210" text-anchor="middle" font-size="15" fill="#1f2937">your AI coding agent</text>
+  <text x="165" y="244" text-anchor="middle" font-size="15" fill="#1f2937">Answer a few questions:</text>
+  <text x="165" y="264" text-anchor="middle" font-size="15" fill="#1f2937">licence, where the model</text>
+  <text x="165" y="284" text-anchor="middle" font-size="15" fill="#1f2937">comes from, a few test images</text>
+
+  <line x1="305" y1="175" x2="358" y2="175" stroke="#6b7280" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- Card 2: Agent -->
+  <rect x="365" y="30" width="270" height="290" rx="14" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+  <rect x="477" y="58" width="46" height="38" rx="9" fill="#3b82f6"/>
+  <circle cx="491" cy="77" r="5" fill="#ffffff"/>
+  <circle cx="509" cy="77" r="5" fill="#ffffff"/>
+  <line x1="500" y1="58" x2="500" y2="48" stroke="#3b82f6" stroke-width="3"/>
+  <circle cx="500" cy="45" r="4" fill="#3b82f6"/>
+  <rect x="485" y="100" width="30" height="22" rx="5" fill="#3b82f6"/>
+  <text x="500" y="156" text-anchor="middle" font-size="22" font-weight="700" fill="#1e40af">2. Your AI agent</text>
+  <text x="390" y="192" font-size="15" fill="#1f2937">✓ Installs every tool it needs</text>
+  <text x="390" y="220" font-size="15" fill="#1f2937">✓ Converts your model</text>
+  <text x="390" y="248" font-size="15" fill="#1f2937">✓ Proves it gives the same</text>
+  <text x="408" y="268" font-size="15" fill="#1f2937">results as the original</text>
+  <text x="390" y="296" font-size="15" fill="#1f2937">✓ Packages it with the proof</text>
+
+  <line x1="640" y1="175" x2="693" y2="175" stroke="#6b7280" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- Card 3: Zoo -->
+  <rect x="700" y="30" width="270" height="290" rx="14" fill="#fff7ed" stroke="#f59e0b" stroke-width="2"/>
+  <rect x="812" y="54" width="46" height="18" rx="4" fill="#f59e0b"/>
+  <rect x="812" y="78" width="46" height="18" rx="4" fill="#f59e0b" opacity="0.8"/>
+  <rect x="812" y="102" width="46" height="18" rx="4" fill="#f59e0b" opacity="0.6"/>
+  <text x="835" y="156" text-anchor="middle" font-size="22" font-weight="700" fill="#92400e">3. Sparrow model zoo</text>
+  <text x="835" y="192" text-anchor="middle" font-size="15" fill="#1f2937">Submitted for review,</text>
+  <text x="835" y="212" text-anchor="middle" font-size="15" fill="#1f2937">only after you say yes</text>
+  <text x="835" y="246" text-anchor="middle" font-size="15" fill="#1f2937">A reviewer checks the</text>
+  <text x="835" y="266" text-anchor="middle" font-size="15" fill="#1f2937">licence and the proof</text>
+  <text x="835" y="296" text-anchor="middle" font-size="15" fill="#1f2937">Your model is published</text>
+
+  <!-- Footer -->
+  <text x="500" y="362" text-anchor="middle" font-size="15" fill="#4b5563">Tested with Claude Code · GitHub Copilot CLI · Codex CLI  —  other coding agents should work too</text>
+</svg>
