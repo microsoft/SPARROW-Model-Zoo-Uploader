@@ -50,14 +50,44 @@ postprocessing methods the installed engine supports.
 Work through the stages in order. Each stage lists the command, what passing means, and what to
 do when it fails. Details on failures: `references/failure-modes.md`.
 
-### S0 — Environment check
+### S0 — Set up the environment (you do this, not the user)
+
+Assume the user has nothing installed except you, and may not be technical. Install what is
+missing yourself. Before each install, say in one line what it is and why it is needed. Ask
+first before anything that needs administrator rights (`sudo`, a system package manager).
+Install into the user's home folder, never system-wide.
+
+1. **uv** (Python and package manager): `uv --version`. If missing, run the official installer
+   (macOS/Linux: `curl -LsSf https://astral.sh/uv/install.sh | sh`; Windows PowerShell:
+   `irm https://astral.sh/uv/install.ps1 | iex`), then make sure `~/.local/bin` is on `PATH` for
+   your later commands. uv supplies Python 3.11–3.13 itself; no separate Python install is needed.
+2. **The uploader CLI**:
+   `uv tool install --python 3.12 'sparrow-model-uploader[submit] @ git+https://github.com/microsoft/SPARROW-Model-Zoo-Uploader'`.
+   Use `[ultralytics,submit]` instead when the source model is PyTorch or Ultralytics (raw
+   parity needs torch). Re-run with `--force` to change extras later.
+3. **The Sparrow Engine `spe` binary**, version 0.1.30 (not on PyPI). With Homebrew:
+   `brew install microsoft/sparrow-engine/sparrow-engine`. Otherwise download the asset for the
+   user's platform from the v0.1.30 release (`sparrow-engine-cpu-0.1.30-linux-x86_64.tar.gz`,
+   `-macos-aarch64.tar.gz` or `-windows-x86_64.zip`), check it against its `.sha256` file,
+   extract it under the user's home folder and put its `bin/` on `PATH`. Check with
+   `spe --version`.
+4. **Hugging Face account** (needed only to submit, but ask now because the username goes into
+   the bundle at S1). Ask whether the user has one; if not, give them
+   https://huggingface.co/join. Check the login with
+   `uvx --from 'huggingface_hub>=0.34' hf auth whoami`. If they are not logged in and want to
+   submit, ask them to create a **Write** token at https://huggingface.co/settings/tokens and run
+   `uvx --from 'huggingface_hub>=0.34' hf auth login` themselves in their own terminal (it
+   prompts for the token). Never ask for the token in the conversation.
+5. Run the check and repeat until every blocking item passes:
 
 ```bash
 sparrow-uploader doctor
 ```
 
-Checks Python ≥3.11, `uv`, the `spe` engine binary, onnx and onnxruntime. `spe` is not on PyPI;
-if something is missing, run the fix command it prints, then re-run `doctor`.
+`doctor` checks Python ≥3.11, `uv`, the `spe` engine binary, onnx and onnxruntime, and prints a
+fix command for each missing item. Framework packages for the conversion itself (torch,
+tensorflow, timm, …) are not installed here; S4 runs them in a throw-away environment
+(`references/conversion-recipes.md`).
 
 ### S1 — Intake (ask the user)
 
