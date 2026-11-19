@@ -182,6 +182,12 @@ def cmd_status(a):
     return status(_ws(a), repo=a.repo, token=a.token, pr=a.pr)
 
 
+def cmd_prepare_finetune(a):
+    from .finetune import prepare_finetune
+
+    return prepare_finetune(a.weights, a.labels, a.output, force=a.force)
+
+
 def cmd_install_skill(a):
     from .install_skill import install_skill
 
@@ -470,6 +476,27 @@ def build_parser() -> argparse.ArgumentParser:
     )
     sp.add_argument("zip")
     sp.set_defaults(fn=cmd_verify)
+
+    sp = sub.add_parser(
+        "prepare-finetune",
+        help="build a private ResNet-50 training package for the Sparrow fine-tune service "
+        "(offline; nothing is uploaded)",
+    )
+    sp.add_argument(
+        "--weights",
+        type=Path,
+        required=True,
+        help="timm resnet50 state dict as .safetensors (pickle/.pt/.pth are refused)",
+    )
+    sp.add_argument(
+        "--labels",
+        type=Path,
+        required=True,
+        help="UTF-8 labels file, one label per line in classifier-head order",
+    )
+    sp.add_argument("--output", type=Path, required=True, help="package ZIP to write")
+    sp.add_argument("--force", action="store_true", help="replace an existing --output")
+    sp.set_defaults(fn=cmd_prepare_finetune)
 
     sp = sub.add_parser(
         "install-skill", help="copy the agent skill into an agent tool's skills dir"
