@@ -25,6 +25,8 @@ There are two ways to use it:
    want to drive each step.
 
 For what to prepare and how the zoo review works, read the [submission guide](docs/user-guide.md).
+To fine-tune your own ResNet-50 classifier in the Sparrow fine-tune service instead of publishing
+it, see [private training package](#private-training-package-for-the-sparrow-fine-tune-service).
 
 ## Quick start: let your agent do it
 
@@ -221,6 +223,35 @@ admin reviews the submission, publishes approved models through the zoo's releas
 comments the decision and closes the pull request. To answer review comments, fix the bundle,
 re-run `package`, then `submit --pr <number> --confirm-public` to push a new revision to the same
 pull request. See the [submission guide](docs/user-guide.md) for what the reviewer checks.
+
+## Private training package for the Sparrow fine-tune service
+
+`prepare-finetune` turns your own ResNet-50 classifier into a package the Sparrow fine-tune
+service can train from (a "local base model"). It is not a zoo submission: it runs offline,
+uploads nothing, and needs no workspace or ONNX file. You upload the ZIP to your fine-tune
+service yourself (`POST /v1/base-models/local`).
+
+```bash
+uv tool install --force 'sparrow-model-uploader[finetune] @ git+https://github.com/microsoft/SPARROW-Model-Zoo-Uploader'
+sparrow-uploader prepare-finetune --weights weights.safetensors --labels labels.txt \
+  --output resnet50-finetune.zip
+```
+
+- `--weights`: a timm `resnet50` state dict saved with safetensors, for example
+  `safetensors.torch.save_file(model.state_dict(), "weights.safetensors")` for a model built with
+  `timm.create_model("resnet50", num_classes=N)`. Pickle, `.pt` and `.pth` files are refused
+  without being loaded, because loading them can run code.
+- `--labels`: UTF-8 text, one label per line, in the order of the classifier head rows. Blank
+  lines and duplicates are refused.
+- The command refuses, and writes nothing, when tensors are missing, extra, reshaped, of another
+  dtype or architecture, hold NaN or infinite values, or when the head size differs from the
+  number of labels. It then runs one real training step on the CPU, on a copy of the weights, and
+  checks that the loss and gradients are finite.
+- The ZIP holds exactly two uncompressed files: `weights.safetensors` (your tensors, unchanged)
+  and `manifest.json` (`schema` `sparrow-finetune/base-v1`, `pipeline` `conventional_classifier`,
+  `model_arch` `resnet50`, your labels, and the sha256 of the weights). It is written to a
+  temporary file and moved into place, so an interrupted run leaves no partial package; an
+  existing `--output` is replaced only with `--force`.
 
 ## What gets checked
 

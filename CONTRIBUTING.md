@@ -7,7 +7,7 @@ agent follows is `skills/sparrow-model-uploader/SKILL.md`, not this file.
 
 | Path | What |
 |---|---|
-| `src/sparrow_uploader/` | The `sparrow-uploader` CLI. One module per stage (`doctor`, `intake`, `onnx_tools`, `fit`, `scaffold`, `smoke`, `parity`, `lint`, `package`). |
+| `src/sparrow_uploader/` | The `sparrow-uploader` CLI. One module per stage (`doctor`, `intake`, `onnx_tools`, `fit`, `scaffold`, `smoke`, `parity`, `lint`, `package`), plus `finetune` for the separate `prepare-finetune` training package. |
 | `src/sparrow_uploader/capabilities.py` | Snapshot of what the pinned `sparrow-engine` version can run. Update it together with `ENGINE_VERSION`. |
 | `skills/sparrow-model-uploader/` | The agent skill (`SKILL.md` + `references/`). Shipped inside the wheel by `install-skill`. |
 | `plugin.json`, `.claude-plugin/`, `gemini-extension.json` | Plugin manifests for agent tools. |
