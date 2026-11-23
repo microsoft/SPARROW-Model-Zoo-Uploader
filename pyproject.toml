@@ -20,7 +20,7 @@ Issues = "https://github.com/microsoft/SPARROW-Model-Zoo-Uploader/issues"
 # Conversion-time only. Ultralytics is AGPL-3.0; it never ships inside a bundle.
 ultralytics = ["torch>=2.6", "torchvision>=0.21", "ultralytics>=8.3"]
 submit = ["huggingface_hub>=0.25"]
-# `prepare-finetune` only: the strict timm resnet50 check and the CPU training step.
+# `prepare-finetune` only: the strict timm architecture check and the CPU training step.
 finetune = ["torch>=2.6", "timm>=1.0", "safetensors>=0.4.3"]
 
 [project.scripts]

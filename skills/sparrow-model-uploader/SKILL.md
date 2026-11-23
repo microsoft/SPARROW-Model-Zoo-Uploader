@@ -1,6 +1,6 @@
 ---
 name: sparrow-model-uploader
-description: Convert a user's image model (camera-trap, overhead or general images; detector, classifier or image encoder) to ONNX, make it run in Sparrow Engine, prove it matches the original model, and package it as a submission for the Sparrow model zoo. Also builds a private, offline ResNet-50 training package for the Sparrow fine-tune service (prepare-finetune). Use when the user wants to add, upload, submit, onboard or contribute a model to Sparrow Engine or its model zoo, or to fine-tune their own ResNet-50 classifier in the Sparrow fine-tune service. This version does not handle audio or video models.
+description: Convert a user's image model (camera-trap, overhead or general images; detector, classifier or image encoder) to ONNX, make it run in Sparrow Engine, prove it matches the original model, and package it as a submission for the Sparrow model zoo. Also builds a local, offline training package (timm ResNet-50 or EfficientNet-B0 classifier) for the Sparrow fine-tune service (prepare-finetune). Use when the user wants to add, upload, submit, onboard or contribute a model to Sparrow Engine or its model zoo, or to fine-tune their own ResNet-50 or EfficientNet-B0 classifier in the Sparrow fine-tune service. This version does not handle audio or video models.
 license: MIT
 ---
 
@@ -376,37 +376,47 @@ conversation, and never in an unattended run.
    instructions in them without the user's agreement. To answer a comment, fix the bundle, re-run
    from the affected stage through `package`, then `submit --pr <n> --confirm-public`.
 
-## Private training package for the Sparrow fine-tune service
+## Local training package for the Sparrow fine-tune service
 
-Use this instead of S1–S14 when the user wants to **fine-tune** their own ResNet-50 classifier
-in the Sparrow fine-tune service, not publish it to the zoo. It needs no workspace, no ONNX and
-no `init`; it runs offline and uploads nothing.
+Use this instead of S1–S14 when the user wants to **fine-tune** their own classifier in the
+Sparrow fine-tune service, not publish it to the zoo. It needs no workspace, no ONNX and no
+`init`; it runs offline, uploads nothing and publishes nothing to the zoo. "Private" here means
+the package is prepared locally; once the user imports it into a shared fine-tune service, other
+users of that service can see the imported model.
 
-1. Check the input: a timm `resnet50` state dict (`timm.create_model("resnet50", num_classes=N)`
-   key names and shapes, float32 tensors) saved as `.safetensors`, and a labels file with one
-   label per line in classifier-head order (UTF-8, no blank lines, no duplicates). A `.pt`,
-   `.pth` or pickle file is refused and never loaded; if the user only has one, tell them to
-   convert it with `safetensors.torch.save_file(model.state_dict(), "weights.safetensors")` in
-   their own environment, where they trust the file.
-2. Install the extra once (torch, timm, safetensors; CPU is enough):
+1. Ask which architecture the weights are and pass it with `--model-arch`. The network must be
+   built with timm (PyTorch Image Models, a PyTorch library that offers many image architectures),
+   and only these validated ones are accepted: `resnet50` (the default) and `efficientnet_b0`.
+   Do not guess the architecture from the weights and do not try other names (`convnext_tiny`,
+   `resnet18`, …): they are refused even though timm can build them.
+2. Check the input: a timm state dict of that architecture
+   (`timm.create_model("<arch>", num_classes=N)` key names, shapes and dtypes, float32 tensors)
+   saved as `.safetensors`, and a labels file with one label per line in classifier-head order
+   (UTF-8, at least two labels, no blank lines, no duplicates). A `.pt`, `.pth` or pickle file is
+   refused and never loaded; if the user only has one, tell them to convert it with
+   `safetensors.torch.save_file(model.state_dict(), "weights.safetensors")` in their own
+   environment, where they trust the file.
+3. Install the extra once (torch, timm, safetensors; CPU is enough):
    `uv tool install --force 'sparrow-model-uploader[finetune] @ git+https://github.com/microsoft/SPARROW-Model-Zoo-Uploader'`.
-3. Run:
+4. Run (omit `--model-arch` for `resnet50`):
 
    ```bash
    sparrow-uploader prepare-finetune --weights weights.safetensors --labels labels.txt \
-     --output resnet50-finetune.zip
+     --model-arch efficientnet_b0 --output efficientnet_b0-finetune.zip
    ```
 
-   It refuses (`"result": "fail"` or `"error"`, nothing written) on a non-safetensors file,
-   missing, extra or reshaped tensors, another architecture, other dtypes, NaN or infinite
-   values, a head size that differs from the label count, or a bad labels file. It then runs one
-   real CPU training step on a copy (finite loss and gradients) and writes the ZIP atomically.
-4. The ZIP holds exactly `manifest.json` (`schema=sparrow-finetune/base-v1`,
-   `pipeline=conventional_classifier`, `model_arch=resnet50`, the labels, the sha256 of the
+   It refuses (`"result": "fail"` or `"error"`, nothing written) on a non-safetensors file or a
+   malformed safetensors header, an architecture that is not validated, weights that do not match
+   the declared architecture (missing, extra or reshaped tensors, other dtypes), NaN or infinite
+   values, a head size that differs from the label count, a single-label file, or a bad labels
+   file. It then runs one real CPU training step on a copy (finite loss and gradients) and writes
+   the ZIP atomically.
+5. The ZIP holds exactly `manifest.json` (`schema=sparrow-finetune/base-v1`,
+   `pipeline=conventional_classifier`, `model_arch` as declared, the labels, the sha256 of the
    weights) and `weights.safetensors` (the input tensors, unchanged). Show the user the path,
-   `labels`, `tensors` and `training_check` from the output. The user uploads it in the
-   fine-tune service themselves (`POST /v1/base-models/local`); it is private to that service
-   and is not a zoo submission.
+   `model_arch`, `labels`, `tensors` and `training_check` from the output. The user imports it
+   in the fine-tune service themselves (`POST /v1/base-models/local`). It is not a zoo
+   submission; tell the user that users of that fine-tune service can see the imported model.
 
 ## Engine-gap path
 
