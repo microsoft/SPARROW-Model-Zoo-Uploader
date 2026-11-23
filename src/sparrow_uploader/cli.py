@@ -11,6 +11,7 @@ from typing import Any
 
 from . import __version__
 from . import capabilities as caps
+from .finetune import ARCHITECTURES, MODEL_ARCH
 from .workspace import GateFailed, UploaderError, Workspace
 
 
@@ -185,7 +186,7 @@ def cmd_status(a):
 def cmd_prepare_finetune(a):
     from .finetune import prepare_finetune
 
-    return prepare_finetune(a.weights, a.labels, a.output, force=a.force)
+    return prepare_finetune(a.weights, a.labels, a.output, force=a.force, model_arch=a.model_arch)
 
 
 def cmd_install_skill(a):
@@ -479,14 +480,22 @@ def build_parser() -> argparse.ArgumentParser:
 
     sp = sub.add_parser(
         "prepare-finetune",
-        help="build a private ResNet-50 training package for the Sparrow fine-tune service "
-        "(offline; nothing is uploaded)",
+        help="build a local training package (ResNet-50 or EfficientNet-B0 classifier) for the "
+        "Sparrow fine-tune service (offline; nothing is uploaded or published to the zoo)",
     )
     sp.add_argument(
         "--weights",
         type=Path,
         required=True,
-        help="timm resnet50 state dict as .safetensors (pickle/.pt/.pth are refused)",
+        help="timm state dict of the --model-arch network as .safetensors "
+        "(pickle/.pt/.pth are refused unread)",
+    )
+    sp.add_argument(
+        "--model-arch",
+        choices=list(ARCHITECTURES),
+        default=MODEL_ARCH,
+        help="timm (PyTorch Image Models) architecture of the weights; only validated ones are "
+        f"accepted, never inferred (default: {MODEL_ARCH})",
     )
     sp.add_argument(
         "--labels",
